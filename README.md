@@ -1,1 +1,1 @@
-# Proyecto-1---C23302
+# Proyecto 1 - Algoritmos
