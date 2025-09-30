@@ -23,18 +23,14 @@ from .tablahashabierta import TablaHashAbierta
 console = Console()
 
 
-# =====================
-# Utilidades de pantalla
-# =====================
 
 
 def panel_contenido(
 	texto: str, *, titulo: str = "Diccionario", width: int | None = None
 ) -> None:
-	"""Imprime un Panel con doble línea y fondo azul, como el recuadro del Pascal."""
+	"""Imprime un Panel con doble línea y fondo azul."""
 	console.clear()
 	if width is None:
-		# Mantener proporción similar a 80 columnas del original
 		width = min(80, max(40, console.size.width - 4))
 	panel = Panel(
 		Align.left(texto),
@@ -53,39 +49,31 @@ def pausa(msg: str = "Pulse [bold]Enter[/] para continuar…") -> None:
 
 
 def leer_hilera(pregunta: str) -> str:
-	"""Lee una hilera similar a TDato (máx. 20 chars como en el Pascal)."""
+	"""Lee una hilera similar a TDato (máx. 20 chars)."""
 	s = Prompt.ask(pregunta).strip()
 	return s[:20]
 
 
-# =====================
-# Lectura de una tecla (sin Enter)
-# =====================
-
 
 def leer_tecla(validos: str) -> str:
 	"""Lee una sola tecla y la devuelve sin requerir Enter.
-
-	- En Windows usa `msvcrt.getwch()`.
-	- En Unix usa `termios` + `tty` en modo raw.
-	Ignora teclas fuera de `validos`.
 	"""
 	try:
-		import msvcrt  # type: ignore
+		import msvcrt  
 	except Exception:
-		msvcrt = None  # type: ignore
+		msvcrt = None  
 
-	if msvcrt is not None:  # Windows
+	if msvcrt is not None:  
 		while True:
 			ch = msvcrt.getwch()
-			# Descartar prefijos de teclas especiales (setas, F1, etc.)
+
 			if ch in ("\x00", "\xe0"):
 				_ = msvcrt.getwch()
 				continue
 			if ch in validos:
-				console.print(ch, end="")  # eco visual como en Pascal
+				console.print(ch, end="")  
 				return ch
-	else:  # Unix
+	else:  
 		import termios
 		import tty
 
@@ -101,10 +89,6 @@ def leer_tecla(validos: str) -> str:
 		finally:
 			termios.tcsetattr(fd, termios.TCSADRAIN, old)
 
-
-# =====================
-# Operaciones de menú
-# =====================
 
 
 def agregar(diccionario: Diccionario) -> None:
@@ -152,17 +136,14 @@ def limpiar(diccionario: Diccionario) -> None:
 	pausa()
 
 
-# ============
-# Menúes
-# ============
 
 
 def render_menu_etapa() -> None:
 	cuerpo = (
-		"\n"  # deja un margen superior dentro del panel
+		"\n" 
 		"            Etapa\n\n"
-		"[1] Menú diccionarios (entregas 1 y 2)\n"
-		"[2] Pruebas de rendimiento ([italic]benchmarking[/])\n\n"
+		"[1] Menú diccionarios \n"
+		"[2] Pruebas de rendimiento (no disponible)\n\n"
 		"Digite una opción [_]"
 	)
 	panel_contenido(cuerpo)
@@ -170,7 +151,7 @@ def render_menu_etapa() -> None:
 
 def render_menu_clase() -> None:
 	cuerpo = (
-		"\n"  # deja un margen superior dentro del panel
+		"\n"  
 		"            Clase Diccionario\n\n"
 			"[1] ListaOrdenadaDinámica\n"
 		"[2] ListaOrdenadaEstática\n"
@@ -186,14 +167,15 @@ def render_menu_clase() -> None:
 
 def render_menu_diccionario() -> None:
 	cuerpo = (
-		"\n"  # deja un margen superior dentro del panel
+		"\n"  
 		"            Diccionario\n\n"
 		"[1] Agregar un elemento al diccionario\n"
 		"[2] Borrar un elemento del diccionario\n"
 		"[3] Existencia de un elemento en el diccionario\n"
 		"[4] Imprimir el diccionario\n"
 		"[5] Limpiar el diccionario\n"
-		"[6] Salir\n\n"
+		"[6] Ver estadísticas\n"
+		"[7] Salir\n\n"
 		"Digite una opción [_]"
 	)
 	panel_contenido(cuerpo)
@@ -202,7 +184,6 @@ def render_menu_diccionario() -> None:
 def menu_etapa() -> str:
 	try:
 		render_menu_etapa()
-		# leer una sola tecla válida y eco inmediato
 		return leer_tecla("12")
 	except BaseException:
 		raise ValueError("No se pudo devolver una opción.")
@@ -212,13 +193,11 @@ def menu_clase() -> Diccionario:
 	try:
 		while True:
 			render_menu_clase()
-			# leer una sola tecla válida y eco inmediato
 			opcion = leer_tecla("1234567")
 			match opcion:
 				case "1":
 					return ListaOrdenadaDinámica()
 				case "2":
-					# Capacidad configurable para la lista estática.
 					try:
 						panel_contenido(
 							"Capacidad de ListaOrdenadaEstática (entero > 0).\nDeje vacío para usar 100 por defecto.",
@@ -243,10 +222,7 @@ def menu_diccionario(diccionario: Diccionario) -> None:
 	try:
 		while True:
 			render_menu_diccionario()
-			# leer una sola tecla válida y eco inmediato
-			opcion = leer_tecla("123456")
-			# pequeña pausa visual como en Pascal
-			# (no Delay, pero el eco ya se ve)
+			opcion = leer_tecla("1234567")
 			match opcion:
 				case "1":
 					agregar(diccionario)
@@ -258,7 +234,25 @@ def menu_diccionario(diccionario: Diccionario) -> None:
 					imprimir(diccionario)
 				case "5":
 					limpiar(diccionario)
-				case "6":
+				case "6":  
+					panel_contenido("Estadísticas de la estructura")
+					info: list[str] = []
+					info.append(f"Tipo: {diccionario.__class__.__name__}")
+					try:
+						info.append(f"Tamaño: {len(diccionario)}")  
+					except Exception:
+						pass
+					info.append("Duplicados: permitidos")
+					info.append("Borrado: elimina UNA ocurrencia")
+					if hasattr(diccionario, "factor_carga"):
+						try:
+							fc = diccionario.factor_carga()  
+							info.append(f"Factor de carga: {fc:.3f}")
+						except Exception:
+							pass
+					console.print("\n".join(info))
+					pausa()
+				case "7":
 					console.clear()
 					break
 	finally:
