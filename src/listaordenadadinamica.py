@@ -10,14 +10,16 @@ class Nodo:
 
 
 class ListaOrdenadaDinámica(Diccionario):
-	"""Lista simplemente enlazada que mantiene sus elementos en orden ascendente.
+	"""Lista simplemente enlazada ordenada ascendentemente.
 
-	- Permite elementos repetidos.
-	- Las operaciones recorren secuencialmente la lista (O(n)).
+	Características:
+	- Permite duplicados (el nuevo duplicado se coloca tras los existentes).
+	- Inserción / borrado / búsqueda: O(n) en el peor caso.
+	- Limpieza: O(1) (se descarta la sub-lista).
 	"""
 
 	def __init__(self) -> None:
-		self.__cabeza: Nodo = Nodo()  # centinela (no almacena dato real)
+		self.__cabeza: Nodo = Nodo()
 		self.__tamaño: int = 0
 
 	def __len__(self) -> int:
@@ -40,12 +42,12 @@ class ListaOrdenadaDinámica(Diccionario):
 		ant = self.__cabeza
 		act = ant.siguiente
 		while act is not None and act.elemento <= elemento:
-			# con <= colocamos nuevos duplicados después de existentes
 			ant = act
 			act = act.siguiente
 		nuevo.siguiente = act
 		ant.siguiente = nuevo
 		self.__tamaño += 1
+		self.__verifique_invariante()
 
 	def borre(self, elemento: str) -> bool:
 		ant = self.__cabeza
@@ -56,6 +58,7 @@ class ListaOrdenadaDinámica(Diccionario):
 		if act is not None and act.elemento == elemento:
 			ant.siguiente = act.siguiente
 			self.__tamaño -= 1
+			self.__verifique_invariante()
 			return True
 		return False
 
@@ -80,5 +83,25 @@ class ListaOrdenadaDinámica(Diccionario):
 			act = act.siguiente
 		return "[" + ", ".join(elems) + "]"
 
-	def __del__(self) -> None:  # liberar por claridad (GC lo maneja normalmente)
+	def __del__(self) -> None: 
 		self.limpie()
+
+	def __verifique_invariante(self) -> None:
+		"""Comprueba (solo en modo debug) que:
+		- La secuencia está en orden no decreciente.
+		- El contador interno coincide con el número de nodos.
+		"""
+		contador = 0
+		prev: Nodo | None = None
+		act = self.__cabeza.siguiente
+		while act is not None:
+			if prev is not None:
+				assert prev.elemento <= act.elemento, (
+					"Lista desordenada: '%s' antes de '%s'" % (prev.elemento, act.elemento)
+				)
+			prev = act
+			contador += 1
+			act = act.siguiente
+		assert contador == self.__tamaño, (
+			f"Tamaño inconsistente: contador={contador} almacenado={self.__tamaño}"
+		)

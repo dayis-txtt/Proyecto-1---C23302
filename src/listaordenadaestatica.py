@@ -37,9 +37,11 @@ class Array:
 class ListaOrdenadaEstática(Diccionario):
 	"""Lista ordenada implementada sobre un arreglo de tamaño fijo.
 
-	- Mantiene orden ascendente.
-	- Permite duplicados (los nuevos se ubican después de los existentes).
-	- No crece: si está llena, la inserción se ignora silenciosamente.
+	Características:
+	- Orden ascendente permanente.
+	- Duplicados permitidos (nuevo va tras los existentes).
+	- Capacidad fija: inserciones extra se descartan.
+	- Búsqueda por binary search (lower/upper bound).
 	"""
 
 	def __init__(self, tamaño: int):
@@ -61,9 +63,7 @@ class ListaOrdenadaEstática(Diccionario):
 		capacidad = len(self.__arreglo)
 		n = len(self)
 		if n >= capacidad:
-			# Estructura llena: no se inserta (estática)
 			return
-		# posición de inserción: upper_bound (primera > elemento)
 		pos = self.__upper_bound(elemento, 0, n)
 		# correr a la derecha
 		i = n - 1
@@ -72,6 +72,7 @@ class ListaOrdenadaEstática(Diccionario):
 			i -= 1
 		self.__arreglo[pos] = elemento
 		self.__ultimo = 0 if self.__ultimo is None else self.__ultimo + 1
+		self.__verifique_invariante()
 
 	def borre(self, elemento: str) -> bool:
 		n = len(self)
@@ -79,18 +80,17 @@ class ListaOrdenadaEstática(Diccionario):
 			return False
 		idx = self.__lower_bound(elemento, 0, n)
 		if idx < n and self.__arreglo[idx] == elemento:
-			# correr a la izquierda
 			i = idx
 			while i < n - 1:
 				self.__arreglo[i] = self.__arreglo[i + 1]
 				i += 1
-			# limpiar último ocupado
 			self.__arreglo[n - 1] = None
 			if n - 1 == 0:
 				self.__ultimo = None
 			else:
 				assert self.__ultimo is not None
 				self.__ultimo -= 1
+			self.__verifique_invariante()
 			return True
 		return False
 
@@ -118,9 +118,19 @@ class ListaOrdenadaEstática(Diccionario):
 	def __del__(self) -> None:
 		self.limpie()
 
-	# ==================
-	# Utilitarios (privados)
-	# ==================
+
+	def __verifique_invariante(self) -> None:
+		"""Verifica orden ascendente y consistencia de tamaño.
+		"""
+		n = len(self)
+		if n == 0:
+			return
+		prev = self.__arreglo[0]
+		for i in range(1, n):
+			curr = self.__arreglo[i]
+			if prev is not None and curr is not None and prev > curr:
+				raise AssertionError("Invariante roto: arreglo no ordenado")
+			prev = curr
 
 	def __lower_bound(self, x: str, lo: int, hi: int) -> int:
 		"""Primer índice i en [lo,hi) tal que a[i] >= x."""
