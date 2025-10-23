@@ -129,14 +129,78 @@ Costo:
 Si se quisiera medir el tiempo: tomar la hora antes y después del rehash y dividir entre los elementos reinsertados.
 
 ---
+## 9. Árbol Binario de Búsqueda (ABB)
+Un ABB mantiene la propiedad de orden: para cada nodo, toda rama del subárbol izquierdo es menor y toda rama del subárbol derecho es mayor. Esto permite búsquedas, inserciones y borrados eficientes mientras el árbol esté balanceado.
+
+Operaciones típicas:
+- `inserte`: compara desde la raíz y baja a izquierda/derecha hasta encontrar un lugar vacío (`None`); ahí crea el nuevo nodo. Si la clave ya existe se ignora para evitar duplicados.
+- `miembro`: mismo recorrido que inserte, devolviendo `True` si encuentra la clave.
+- `borre`: al localizar el nodo puede tener (a) 0 hijos → se elimina directo; (b) 1 hijo → se reemplaza por el hijo; (c) 2 hijos → se reemplaza por el sucesor in-order (el menor del subárbol derecho).
+
+Complejidad aproximada:
+- Promedio: O(log n) para inserción/borrado/búsqueda (asumiendo árbol razonablemente balanceado).
+- Peor caso: O(n) si se desbalancea (por ejemplo, claves insertadas en orden ascendente).
+
+Recorridos importantes:
+- **In-order** (izquierdo → nodo → derecho) entrega las claves en orden ascendente.
+- **Pre-order** y **post-order** ayudan a clonar o liberar el árbol.
+
+### 9.1 ABB por punteros (`AbbPunteros`)
+- Implementación con nodos enlazados (`_NodoAbb`) que almacenan `clave`, `izquierdo` y `derecho`.
+- `inserte` y `borre` re-enlazan referencias manteniendo la propiedad del ABB.
+- `__str__/imprima` usan un recorrido in-order para mostrar `[a, b, c]`.
+- Ventajas: estructura flexible, no necesita un arreglo predeterminado.
+- Desventajas: puede desbalancearse fácilmente y cada nodo requiere memoria extra para las referencias.
+
+### 9.2 ABB por vector (*heap*) (`ABBVectorHeap`)
+- Representa el árbol dentro de un arreglo, similar a la representación de un heap binario.
+- Para índice base 0: los hijos de `i` están en `2*i + 1` y `2*i + 2` (si existen); con base 1 serían `2*i` y `2*i + 1`.
+- Permite acceso por índice y favorece la localidad de referencia, pero complica el manejo de huecos al borrar y exige ampliar el arreglo cuando crece.
+
+---
+## 10. Tries (árboles de prefijos)
+Un trie almacena palabras descomponiéndolas carácter por carácter. Cada arista representa una letra y cada nodo puede marcar el final de alguna palabra. Esta estructura permite búsquedas por prefijo en tiempo proporcional a la longitud de la palabra, independientemente del número total de palabras guardadas.
+
+Operaciones básicas:
+- `inserte`: recorre/crea los nodos correspondientes a cada carácter y aumenta el contador de final.
+- `miembro`: recorre las letras y verifica que el nodo final tenga un contador > 0.
+- `borre`: disminuye el contador; si llega a cero y el nodo no tiene hijos, se podan las ramas sobrantes.
+
+Complejidad aproximada (con `m = len(palabra)`):
+- Inserción / búsqueda / borrado: O(m)
+- Impresión (`__str__`): O(n · L) donde `n` es el número de palabras y `L` la longitud promedio.
+
+### 10.1 Trie por punteros (`TriePunteros`)
+- Cada nodo es un objeto con un diccionario `hijos` y un contador `fin` de cuántas palabras terminan ahí.
+- Permite duplicados almacenando el conteo en `fin`.
+- Borrar incluye un paso de poda para eliminar nodos que queden sin hijos.
+- Ventaja: flexibilidad total sobre el alfabeto. Desventaja: mayor sobrecarga por objetos pequeños.
+
+### 10.2 Trie por arreglos (`TrieArreglos`)
+- Mantiene arreglos paralelos: uno con diccionarios de transiciones y otro con contadores finales.
+- Cada nodo se identifica por un índice entero, lo que reduce la cantidad de objetos creados.
+- Permite duplicados igual que la versión por punteros.
+- Ventaja: buena localidad de referencia; desventaja: requiere manejar índices y cuidar la poda manual.
+
+---
 ## Resumen de operaciones por estructura
 | Estructura | inserte | borre | miembro | limpie | Nota |
 |-----------|---------|-------|---------|--------|------|
 | Lista dinámica | O(n) | O(n) | O(n) | O(1) | Sin índice directo |
 | Lista estática | O(n) | O(n) | O(log n) | O(1) | Capacidad fija |
 | Tabla hash | O(1)* | O(1)* | O(1)* | O(m) | *Promedio; peor O(n) |
+| ABB por punteros | O(log n) | O(log n) | O(log n) | O(1) | Puede desbalancearse |
+| ABB por vector | O(log n) | O(log n) | O(log n) | O(1) | Manejo especial al borrar |
+| Trie por punteros | O(m) | O(m) | O(m) | O(1) | Poda de ramas sin uso |
+| Trie por arreglos | O(m) | O(m) | O(m) | O(1) | Índices enteros + diccionarios |
 
-Duplicados: sí en todas. Borrado: una sola ocurrencia.
+Duplicados: permitidos en listas, hash y tries (se lleva un contador); en los ABB se ignoran (claves únicas). Borrado: una sola ocurrencia por llamada.
+
+
+## 11. Scripts de prueba manual
+
+- `scripts/pruebas_primera_entrega.py`: verifica las estructuras de la primera etapa (listas ordenadas y tabla hash), mostrando el paso a paso u opción compacta.
+- `scripts/pruebas_segunda_entrega.py`: prueba ambas variantes de ABB y las dos implementaciones de trie; valida duplicados (ignorados en ABB, contados en tries), casos de borrado (hoja, 1 hijo, 2 hijos) y poda de ramas sobrantes.
 
 
 

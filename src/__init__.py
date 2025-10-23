@@ -15,10 +15,14 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
 
+from .abbpunteros import AbbPunteros
+from .abbvectorheap import ABBVectorHeap
 from .diccionario import Diccionario
 from .listaordenadadinamica import ListaOrdenadaDinámica
 from .listaordenadaestatica import ListaOrdenadaEstática
 from .tablahashabierta import TablaHashAbierta
+from .triearreglos import TrieArreglos
+from .triepunteros import TriePunteros
 
 console = Console()
 
@@ -96,7 +100,11 @@ def agregar(diccionario: Diccionario) -> None:
 	panel_contenido(texto)
 	h = leer_hilera("")
 	if diccionario.miembro(h):
-		console.print("[yellow]El elemento YA existe (se permiten repetidos).[/]")
+			permite_dup = getattr(diccionario, "permite_duplicados", True)
+			if permite_dup:
+				console.print("[yellow]El elemento YA existe (se permiten repetidos).[/]")
+			else:
+				console.print("[yellow]El elemento YA existe (se ignora el duplicado).[/]")
 	diccionario.inserte(h)
 	console.print("[green]Elemento insertado.[/]")
 	pausa()
@@ -156,10 +164,10 @@ def render_menu_clase() -> None:
 			"[1] ListaOrdenadaDinámica\n"
 		"[2] ListaOrdenadaEstática\n"
 			"[3] TablaHashAbierta\n"
-		"[4] ABBPunteros (no disponible)\n"
-		"[5] ABBVectorHeap (no disponible)\n"
-		"[6] TriePunteros (no disponible)\n"
-		"[7] TrieArreglos (no disponible)\n\n"
+		"[4] AbbPunteros\n"
+		"[5] ABBVectorHeap\n"
+		"[6] TriePunteros\n"
+		"[7] TrieArreglos\n\n"
 		"Digite una opción [_]"
 	)
 	panel_contenido(cuerpo)
@@ -212,8 +220,14 @@ def menu_clase() -> Diccionario:
 					return ListaOrdenadaEstática(cap)
 				case "3":
 					return TablaHashAbierta(101)
-				case "4" | "5" | "6" | "7":
-					pausa("Opción no disponible todavía. Presione Enter…")
+				case "4":
+					return AbbPunteros()
+				case "5":
+					return ABBVectorHeap()
+				case "6":
+					return TriePunteros()
+				case "7":
+					return TrieArreglos()
 	except BaseException:
 		raise ValueError("No se pudo instanciar una clase diccionario.")
 
@@ -242,7 +256,11 @@ def menu_diccionario(diccionario: Diccionario) -> None:
 						info.append(f"Tamaño: {len(diccionario)}")  
 					except Exception:
 						pass
-					info.append("Duplicados: permitidos")
+					permite_dup = getattr(diccionario, "permite_duplicados", True)
+					if permite_dup:
+						info.append("Duplicados: permitidos")
+					else:
+						info.append("Duplicados: no permitidos (se ignoran)")
 					info.append("Borrado: elimina UNA ocurrencia")
 					if hasattr(diccionario, "factor_carga"):
 						try:
