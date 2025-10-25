@@ -13,21 +13,39 @@ class _NodoAbb:
 
 
 class AbbPunteros(Diccionario):
-    """Árbol binario de búsqueda implementado con nodos enlazados."""
+    """Árbol binario de búsqueda sin duplicados usando nodos enlazados.
+
+    Cada nodo mantiene referencias explícitas a sus hijos izquierdo y derecho.
+    Las operaciones estándar (insertar, borrar, buscar) preservan la propiedad
+    de orden y garantizan que solo exista una ocurrencia por clave.
+    """
 
     permite_duplicados = False
 
     def __init__(self) -> None:
+        """Crea un ABB vacío sin nodos iniciales."""
         self.__raiz: _NodoAbb | None = None
         self.__tamaño: int = 0
 
     def inserte(self, elemento: str) -> None:
+        """Agrega ``elemento`` si no existe ya en el árbol.
+
+        Recorre recursivamente comparando con cada nodo y lo inserta en la
+        posición correspondiente. Al detectar un duplicado, no modifica la
+        estructura para mantener claves únicas.
+        """
         self.__raiz, insertado = self.__inserte_rec(self.__raiz, elemento)
         if insertado:
             self.__tamaño += 1
             self.__verifique_invariante()
 
     def borre(self, elemento: str) -> bool:
+        """Elimina ``elemento`` si está presente y retorna ``True``.
+
+        Maneja los casos de borrado sin hijos, con un hijo o con dos hijos
+        (reemplazo por el sucesor in-order) y actualiza el tamaño en
+        consecuencia.
+        """
         self.__raiz, borrado = self.__borre_rec(self.__raiz, elemento)
         if borrado:
             self.__tamaño -= 1
@@ -35,19 +53,24 @@ class AbbPunteros(Diccionario):
         return borrado
 
     def limpie(self) -> None:
+        """Vacía por completo el ABB removiendo todos los nodos."""
         self.__raiz = None
         self.__tamaño = 0
 
     def miembro(self, elemento: str) -> bool:
+        """Devuelve ``True`` si ``elemento`` existe en el árbol."""
         return self.__miembro_rec(self.__raiz, elemento)
 
     def imprima(self) -> None:
+        """Imprime el recorrido in-order del árbol."""
         print(self)
 
     def __len__(self) -> int:
+        """Entrega la cantidad de claves almacenadas."""
         return self.__tamaño
 
     def __str__(self) -> str:
+        """Construye una representación legible con las claves ordenadas."""
         elementos: list[str] = []
         self.__recorrido_inorder(self.__raiz, elementos)
         return "[" + ", ".join(elementos) + "]"

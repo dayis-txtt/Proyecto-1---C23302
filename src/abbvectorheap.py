@@ -4,15 +4,28 @@ from .diccionario import Diccionario
 
 
 class ABBVectorHeap(Diccionario):
-    """ABB almacenado en un vector estilo heap binario."""
+    """Árbol binario de búsqueda sin duplicados respaldado por un vector.
+
+    La representación usa un arreglo con índice base 1 donde las posiciones
+    ``2*i`` y ``2*i+1`` corresponden a los hijos izquierdo y derecho. Esto
+    facilita los cálculos y mantiene buena localidad de referencia, pero
+    requiere compactar el arreglo cada vez que se liberan huecos tras un
+    borrado.
+    """
 
     permite_duplicados = False
 
     def __init__(self) -> None:
+        """Crea un ABB vacío inicializando el vector con una entrada centinela."""
         self.__vector: list[str | None] = [None]  # índice 0 se deja vacío para facilitar cálculos
         self.__tamaño: int = 0
 
     def inserte(self, elemento: str) -> None:
+        """Inserta ``elemento`` preservando el orden in-order.
+
+        Si la clave ya existe no se realiza ninguna modificación para mantener
+        la propiedad de claves únicas del ABB.
+        """
         indice = 1
         while True:
             self.__asegure_capacidad(indice)
@@ -31,6 +44,12 @@ class ABBVectorHeap(Diccionario):
                 return
 
     def borre(self, elemento: str) -> bool:
+        """Elimina ``elemento`` si está presente y devuelve ``True``.
+
+        Gestiona los tres casos clásicos de borrado en ABB (hoja, un hijo,
+        dos hijos) mediante sustitución por el sucesor inmediato. Ajusta el
+        contador interno y compacta el vector para evitar residuos al final.
+        """
         if self.__borre_rec(1, elemento):
             self.__tamaño -= 1
             self.__compacte_vector()
@@ -39,21 +58,26 @@ class ABBVectorHeap(Diccionario):
         return False
 
     def limpie(self) -> None:
+        """Vacía el árbol dejando únicamente la casilla centinela."""
         self.__vector = [None]
         self.__tamaño = 0
 
     def miembro(self, elemento: str) -> bool:
+        """Devuelve ``True`` si ``elemento`` existe en el árbol."""
         return self.__miembro_rec(1, elemento)
 
     def imprima(self) -> None:
+        """Imprime el recorrido in-order del ABB."""
         print(self)
 
     def __str__(self) -> str:
+        """Genera una representación tipo lista ordenada para depuración."""
         elems: list[str] = []
         self.__recorrido_inorder(1, elems)
         return "[" + ", ".join(elems) + "]"
 
     def __len__(self) -> int:
+        """Retorna la cantidad de claves almacenadas."""
         return self.__tamaño
 
     def __borre_rec(self, indice: int, elemento: str) -> bool:

@@ -4,22 +4,25 @@ from .diccionario import Diccionario
 
 
 class TrieArreglos(Diccionario):
-    """Trie representado mediante arreglos paralelos.
+    """Trie respaldado por arreglos paralelos de transiciones y contadores.
 
-    Cada nodo se identifica por su índice dentro de los arreglos internos.
-    Las transiciones se almacenan en diccionarios para mantener compatibilidad
-    con alfabetos dinámicos, pero el layout se mantiene en vectores para
-    reducir la cantidad de objetos creados.
+    Los nodos se identifican por índices enteros. Cada posición del arreglo
+    ``__hijos`` guarda un diccionario de transiciones hacia otros índices y el
+    arreglo ``__finales`` almacena cuántas palabras terminan en ese nodo. Se
+    permiten duplicados sumando en ``__finales`` y se realiza poda explícita
+    cuando los nodos dejan de ser necesarios.
     """
 
     permite_duplicados = True
 
     def __init__(self) -> None:
+        """Inicializa el trie vacío con solo la raíz (índice 0)."""
         self.__hijos: list[dict[str, int]] = [{}]
         self.__finales: list[int] = [0]
         self.__total: int = 0
 
     def inserte(self, elemento: str) -> None:
+        """Agrega ``elemento`` y aumenta el contador en su nodo terminal."""
         indice = 0
         for ch in elemento:
             siguiente = self.__hijos[indice].get(ch)
@@ -32,6 +35,7 @@ class TrieArreglos(Diccionario):
         self.__verifique_invariante()
 
     def borre(self, elemento: str) -> bool:
+        """Elimina una ocurrencia de ``elemento`` si está presente."""
         pila: list[tuple[int, str]] = []
         indice = 0
         for ch in elemento:
@@ -50,11 +54,13 @@ class TrieArreglos(Diccionario):
         return True
 
     def limpie(self) -> None:
+        """Reinicia la estructura dejando solo el nodo raíz."""
         self.__hijos = [{}]
         self.__finales = [0]
         self.__total = 0
 
     def miembro(self, elemento: str) -> bool:
+        """Devuelve ``True`` cuando ``elemento`` posee al menos una copia."""
         indice = 0
         for ch in elemento:
             indice = self.__hijos[indice].get(ch, -1)
@@ -63,14 +69,17 @@ class TrieArreglos(Diccionario):
         return self.__finales[indice] > 0
 
     def imprima(self) -> None:
+        """Imprime el recorrido lexicográfico de las palabras almacenadas."""
         print(self)
 
     def __str__(self) -> str:
+        """Retorna el contenido ordenado como lista para depuración."""
         palabras: list[str] = []
         self.__dfs(0, [], palabras)
         return "[" + ", ".join(palabras) + "]"
 
     def __len__(self) -> int:
+        """Entrega el total de palabras del trie (contando duplicados)."""
         return self.__total
 
     def __dfs(self, indice: int, prefijo: list[str], salida: list[str]) -> None:

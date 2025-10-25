@@ -12,19 +12,23 @@ class _NodoTrie:
 
 
 class TriePunteros(Diccionario):
-    """Trie (árbol prefijo) con nodos enlazados.
+    """Trie (árbol de prefijos) implementado con nodos enlazados.
 
-    Mantiene conteo total de palabras (con duplicados) y permite limpiar
-    pruning de nodos al borrar para no dejar ramas inútiles.
+    Cada nodo almacena un diccionario de transiciones y un contador ``fin``
+    que indica cuántas palabras terminan en ese punto. Se permiten duplicados
+    acumulando el contador y, durante el borrado, se podan ramas sin uso para
+    evitar consumo de memoria innecesario.
     """
 
     permite_duplicados = True
 
     def __init__(self) -> None:
+        """Inicializa el trie vacío con un nodo raíz y contador total en cero."""
         self.__raiz = _NodoTrie()
         self.__total = 0
 
     def inserte(self, elemento: str) -> None:
+        """Agrega ``elemento`` incrementando el contador en el nodo terminal."""
         nodo = self.__raiz
         for ch in elemento:
             nodo = nodo.hijos.setdefault(ch, _NodoTrie())
@@ -33,6 +37,12 @@ class TriePunteros(Diccionario):
         self.__verifique_invariante()
 
     def borre(self, elemento: str) -> bool:
+        """Reduce en una unidad la ocurrencia de ``elemento`` si existe.
+
+        Devuelve ``True`` cuando se elimina una copia y ejecuta poda de nodos
+        huérfanos (sin hijos ni ocurrencias) para mantener compacto el
+        almacenamiento.
+        """
         pila: list[tuple[_NodoTrie, str]] = []
         nodo = self.__raiz
         for ch in elemento:
@@ -50,10 +60,12 @@ class TriePunteros(Diccionario):
         return True
 
     def limpie(self) -> None:
+        """Reinicia el trie descartando todos los nodos creados."""
         self.__raiz = _NodoTrie()
         self.__total = 0
 
     def miembro(self, elemento: str) -> bool:
+        """Retorna ``True`` si ``elemento`` tiene al menos una ocurrencia."""
         nodo = self.__raiz
         for ch in elemento:
             nodo = nodo.hijos.get(ch)
@@ -62,14 +74,17 @@ class TriePunteros(Diccionario):
         return nodo.fin > 0
 
     def imprima(self) -> None:
+        """Muestra por consola la lista ordenada de palabras almacenadas."""
         print(self)
 
     def __str__(self) -> str:
+        """Construye una representación legible del contenido del trie."""
         palabras: list[str] = []
         self.__dfs(self.__raiz, [], palabras)
         return "[" + ", ".join(palabras) + "]"
 
     def __len__(self) -> int:
+        """Devuelve el total de palabras considerando duplicados."""
         return self.__total
 
     def __dfs(self, nodo: _NodoTrie, prefijo: list[str], salida: list[str]) -> None:
