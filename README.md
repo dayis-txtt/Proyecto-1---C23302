@@ -4,7 +4,7 @@ Proyecto Tarea 1 — Diccionarios (Estructuras de Datos)
 Requisitos
 ----------
 
-- Python 3.13 o superior
+- Python 3.11 o superior
 - Dependencias: `rich`
 
 Instalación
@@ -37,7 +37,7 @@ Estado actual
 Uso
 ---
 
-1. Selecciona “Menú diccionarios”.
+1. Selecciona “Menú diccionarios” para manipular las estructuras manualmente, o “Pruebas por etapas” para lanzar los scripts incluidos.
 2. Elige la implementación (Listas, Tabla hash, ABB o Tries).
 3. Usa las operaciones: Agregar, Borrar, Existencia, Imprimir, Limpiar.
 	- Listas, tabla hash y tries permiten duplicados (el tamaño cuenta todas las ocurrencias).
@@ -46,8 +46,9 @@ Uso
 Pruebas (Primera Entrega)
 -------------------------
 
-Se incluye un script de verificación manual para cada estructura.
-El script ejecuta los tres escenarios con aserciones y muestra el estado final de cada estructura:
+Se incluye un script de verificación manual para cada estructura. Puedes
+ejecutarlo directo desde el menú (`Pruebas por etapas -> Primera entrega`) o
+desde la terminal:
 
 ```
 py scripts/pruebas_primera_entrega.py
@@ -72,7 +73,7 @@ Notas:
 Pruebas (Segunda Entrega)
 -------------------------
 
-Script que verifica las dos variantes de ABB y ambas versiones de Trie (política “sin duplicados” en ABB y duplicados contados en tries):
+Script que verifica las dos variantes de ABB y ambas versiones de Trie (política “sin duplicados” en ABB y duplicados contados en tries). Disponible desde el menú (`Pruebas por etapas -> Segunda entrega`) o mediante consola:
 
 ```
 py scripts/pruebas_segunda_entrega.py

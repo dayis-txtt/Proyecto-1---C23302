@@ -149,9 +149,10 @@ def limpiar(diccionario: Diccionario) -> None:
 def render_menu_etapa() -> None:
 	cuerpo = (
 		"\n" 
-		"            Etapa\n\n"
-		"[1] Menú diccionarios \n"
-		"[2] Pruebas de rendimiento (no disponible)\n\n"
+		"            Proyecto Diccionario\n\n"
+		"[1] Menú diccionarios\n"
+		"[2] Pruebas por etapas\n"
+		"[3] Pruebas de rendimiento (no disponible)\n\n"
 		"Digite una opción [_]"
 	)
 	panel_contenido(cuerpo)
@@ -161,9 +162,9 @@ def render_menu_clase() -> None:
 	cuerpo = (
 		"\n"  
 		"            Clase Diccionario\n\n"
-			"[1] ListaOrdenadaDinámica\n"
+		"[1] ListaOrdenadaDinámica\n"
 		"[2] ListaOrdenadaEstática\n"
-			"[3] TablaHashAbierta\n"
+		"[3] TablaHashAbierta\n"
 		"[4] AbbPunteros\n"
 		"[5] ABBVectorHeap\n"
 		"[6] TriePunteros\n"
@@ -284,4 +285,50 @@ def main() -> None:
 			diccionario = menu_clase()
 			menu_diccionario(diccionario)
 		case "2":
+			#ejecuta los scripts de las pruebas primera y segunda entrega
+			#si el usuario digita 1, se explicará con que se va a ejecutar la primera prueba y cuando presione enter, se ejecutará
+			#Si el usuario digita 2, se explicará con que se va a ejecutar la segunda prueba y cuando presione enter, se ejecutará
+			console.clear()
+			cuerpo = (
+				"\n" 
+				"            Pruebas por etapas\n\n"
+				"[1] Ejecutar pruebas de la Primera Entrega\n"
+				"[2] Ejecutar pruebas de la Segunda Entrega\n\n"
+				"Digite una opción [_]"
+			)
+			panel_contenido(cuerpo)
+			opcion_prueba = leer_tecla("12")
+			match opcion_prueba:
+				case "1":
+					console.clear()
+					console.print(
+						"[bold]Pruebas de la Primera Entrega[/]\n\n"
+						"Se ejecutarán las pruebas automáticas para las estructuras de datos "
+						"de la Primera Entrega (Listas Ordenadas Tablas Hash).\n\n"
+						"Presione [bold]Enter[/] para iniciar las pruebas..."
+					)
+					pausa("")
+					ejecutar_pruebas_primera()
+				case "2":
+					console.clear()
+					console.print(
+						"[bold]Pruebas de la Segunda Entrega[/]\n\n"
+						"Se ejecutarán las pruebas automáticas para las estructuras de datos "
+						"de la Segunda Entrega (Tries y ABB).\n\n"
+						"Presione [bold]Enter[/] para iniciar las pruebas..."
+					)
+					pausa("")
+					ejecutar_pruebas_segunda()
+		case "3":
 			pausa("Benchmark no implementado aún. Presione Enter…")
+
+def ejecutar_pruebas_primera() -> None:
+	from scripts.pruebas_primera_entrega import main as pruebas_primera
+
+	pruebas_primera([])
+
+def ejecutar_pruebas_segunda() -> None:
+	from scripts.pruebas_segunda_entrega import main as pruebas_segunda
+
+	pruebas_segunda([])
+

@@ -1,5 +1,7 @@
 # Tarea 1 
 
+> Requiere Python 3.11 o superior y la dependencia `rich`.
+
 ## 1. Modelo Diccionario
 El “Diccionario” es una idea general: una colección de palabras donde se puede:
 - agregar (`inserte`)
@@ -199,8 +201,8 @@ Duplicados: permitidos en listas, hash y tries (se lleva un contador); en los AB
 
 ## 11. Scripts de prueba manual
 
-- `scripts/pruebas_primera_entrega.py`: verifica las estructuras de la primera etapa (listas ordenadas y tabla hash), mostrando el paso a paso u opción compacta.
-- `scripts/pruebas_segunda_entrega.py`: prueba ambas variantes de ABB y las dos implementaciones de trie; valida duplicados (ignorados en ABB, contados en tries), casos de borrado (hoja, 1 hijo, 2 hijos) y poda de ramas sobrantes.
+- `scripts/pruebas_primera_entrega.py`: verifica las estructuras de la primera etapa (listas ordenadas y tabla hash), mostrando el paso a paso u opción compacta. Puede invocarse desde el menú principal (`Pruebas por etapas -> Primera entrega`) o ejecutarse manualmente.
+- `scripts/pruebas_segunda_entrega.py`: prueba ambas variantes de ABB y las dos implementaciones de trie; valida duplicados (ignorados en ABB, contados en tries), casos de borrado (hoja, 1 hijo, 2 hijos) y poda de ramas sobrantes. Disponible también desde el menú (`Pruebas por etapas -> Segunda entrega`) o por consola.
 
 
 
