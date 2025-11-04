@@ -115,13 +115,12 @@ Recomendaciones por rangos de N (heurística):
 
 ## 3. Comparación con órdenes teóricas
 
-Resume si los tiempos empíricos siguen la tendencia esperada:
+Tendencia esperada:
 - Listas: inserte/borre/miembro ≈ O(n) (líneas crecientes con N).
 - Hash abierta: ≈ O(1) amortizado (prácticamente constante con N; picos por rehash).
 - ABB (promedio): ≈ O(log n); peor caso ≈ O(n) si se desbalancea.
 - Tries: ≈ O(m) con m = longitud de palabra (constante en este proyecto), por lo que el tiempo debe ser casi independiente de N.
 
-Comenta también el impacto de la longitud de palabra (20) sobre tries.
 
 ## 4. Rangos sugeridos para N
 
@@ -138,10 +137,27 @@ Recomendaciones por rangos de N (heurística):
 
 ## 5. Memoria utilizada
 
-Incluye y comenta los picos de memoria por estructura en N = 100, 50 000 y 1 000 000.
+Tabla comparativa de los picos de memoria en la ejecución N = 10000.
 
-- ¿Qué estructuras crecen más en memoria?
-- ¿Cómo se comparan tries vs ABB vs hash?
+| Estructura                | Pico de memoria (MiB) | Observación                                         |
+| ------------------------- | --------------------- | --------------------------------------------------- |
+| **ListaOrdenadaDinámica** | **0.84**              | Uso moderado y proporcional al tamaño; eficiente.   |
+| **ListaOrdenadaEstática** | **0.15**              | Muy bajo; aprovecha bien la asignación fija.        |
+| **TablaHashAbierta**      | **1.53**              | Algo más alto por las celdas vacías y colisiones.   |
+| **AbbPunteros**           | **1.00**              | Uso equilibrado por nodo y punteros.                |
+| **ABBVectorHeap**         | **0.64**              | Sorprendentemente eficiente para su tipo.           |
+| **TriePunteros**          | **45.24**             | Muy alto; cada nodo tiene múltiples punteros.       |
+| **TrieArreglos**          | **50.44**             | Similar al TriePunteros, incluso ligeramente mayor. |
+
+Picos de memoria.
+
+- Los picos de memoria más altos corresponden a los tries, debido a su estructura altamente ramificada (muchos nodos y punteros por letra posible).
+
+- Listas y árboles binarios (ABB) muestran un crecimiento lineal y razonable.
+
+- Tabla hash abierta tiene un leve incremento por sobreasignación de la tabla.
+
+- El ABBVectorHeap resulta el mejor balance entre tiempo y memoria entre las estructuras dinámicas.
 
 ## 6. Limitaciones
 
@@ -154,6 +170,32 @@ Incluye y comenta los picos de memoria por estructura en N = 100, 50 000 y 1 000
 
 ## 7. Conclusiones
 
-- Resume qué estructuras recomendarías por rango de N y por tipo de operación predominante.
-- Señala sorpresas o divergencias respecto a la teoría.
-- Propón trabajo futuro (por ejemplo, medir prefijos compartidos para tries o árboles balanceados como AVL/Red-Black para ABB).
+1. Uso de memoria:
+
+- Las estructuras más livianas fueron las listas y los árboles.
+
+- Las listas estáticas son las que menos memoria usan.
+
+- Los tries consumen mucha memoria, así que solo valen la pena si se necesita buscar palabras por prefijo muy rápido.
+
+2. Rendimiento general:
+
+- Con pocos datos (alrededor de 100), todas funcionan bien.
+
+- Cuando los datos aumentan (10 000 o más), las estructuras de árbol y hash mantienen un buen equilibrio entre velocidad y memoria.
+
+3. Escalabilidad:
+
+- Los tries no escalan bien porque su consumo de memoria crece demasiado.
+
+- La tabla hash escala bien y se mantiene rápida.
+
+- Al ABB funciona bien, pero puede volverse más lento si no está bien balanceado.
+
+4. Conclusión práctica:
+
+- Si se quiere usar poca memoria, la ListaOrdenadaEstática es la mejor.
+
+- Si se busca un buen equilibrio, el ABB o la Tabla hash abierta son buenas opciones.
+
+- Los tries solo se recomiendan si se necesita buscar por prefijos y la memoria no es un problema.
