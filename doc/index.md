@@ -204,6 +204,27 @@ Duplicados: permitidos en listas, hash y tries (se lleva un contador); en los AB
 - `scripts/pruebas_primera_entrega.py`: verifica las estructuras de la primera etapa (listas ordenadas y tabla hash), mostrando el paso a paso u opción compacta. Puede invocarse desde el menú principal (`Pruebas por etapas -> Primera entrega`) o ejecutarse manualmente.
 - `scripts/pruebas_segunda_entrega.py`: prueba ambas variantes de ABB y las dos implementaciones de trie; valida duplicados (ignorados en ABB, contados en tries), casos de borrado (hoja, 1 hijo, 2 hijos) y poda de ramas sobrantes. Disponible también desde el menú (`Pruebas por etapas -> Segunda entrega`) o por consola.
 
+## 12. Análisis de rendimiento (Tercera Entrega)
+
+El programa incluye un analizador de rendimiento que:
+
+- mide tiempos promedio y desviación estándar de inserción, borrado y búsqueda;
+- estima el uso de memoria por estructura; y
+- genera resultados en JSON y un resumen Markdown.
+
+Puedes ejecutarlo desde el menú principal con “Pruebas de rendimiento”, 
+seleccionando modo rápido (100 y 50 000; 3 corridas) o completo (100, 50 000 y 1 000 000; 10 corridas).
+
+Por consola:
+
+```
+py scripts/analisis_tercera_entrega.py --quick
+# o completo
+py scripts/analisis_tercera_entrega.py
+```
+
+Los resultados se guardan en `resultados/` con tablas por estructura y una heurística de rangos para N.
+
 
 
 

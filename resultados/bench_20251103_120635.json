@@ -1,0 +1,273 @@
+{
+  "results": [
+    {
+      "name": "ListaOrdenadaDinámica",
+      "sizes": [
+        {
+          "n": 100,
+          "insert": {
+            "mean_ns": 6930.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 6480.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 1990.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 17200.0,
+          "done_ns": 2700.0,
+          "memory_peak_bytes": 12424
+        },
+        {
+          "n": 10000,
+          "insert": {
+            "mean_ns": 1002560.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 1014790.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 240550.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 1281200.0,
+          "done_ns": 339100.0,
+          "memory_peak_bytes": 880544
+        }
+      ]
+    },
+    {
+      "name": "ListaOrdenadaEstática",
+      "sizes": [
+        {
+          "n": 100,
+          "insert": {
+            "mean_ns": 19260.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 17150.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 1890.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 34200.0,
+          "done_ns": 17500.0,
+          "memory_peak_bytes": 2368
+        },
+        {
+          "n": 10000,
+          "insert": {
+            "mean_ns": 1894040.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 2092130.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 3240.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 1885300.0,
+          "done_ns": 1655100.0,
+          "memory_peak_bytes": 161012
+        }
+      ]
+    },
+    {
+      "name": "TablaHashAbierta",
+      "sizes": [
+        {
+          "n": 100,
+          "insert": {
+            "mean_ns": 11240.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 10860.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 2210.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 27900.0,
+          "done_ns": 11000.0,
+          "memory_peak_bytes": 23632
+        },
+        {
+          "n": 10000,
+          "insert": {
+            "mean_ns": 881330.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 898210.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 3160.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 2623900.0,
+          "done_ns": 1088700.0,
+          "memory_peak_bytes": 1603720
+        }
+      ]
+    },
+    {
+      "name": "AbbPunteros",
+      "sizes": [
+        {
+          "n": 100,
+          "insert": {
+            "mean_ns": 16370.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 15780.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 1350.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 24800.0,
+          "done_ns": 3600.0,
+          "memory_peak_bytes": 13872
+        },
+        {
+          "n": 10000,
+          "insert": {
+            "mean_ns": 1748220.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 1751470.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 3320.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 2032000.0,
+          "done_ns": 433800.0,
+          "memory_peak_bytes": 1045668
+        }
+      ]
+    },
+    {
+      "name": "ABBVectorHeap",
+      "sizes": [
+        {
+          "n": 100,
+          "insert": {
+            "mean_ns": 39760.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 112550.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 1830.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 40800.0,
+          "done_ns": 1200.0,
+          "memory_peak_bytes": 671048
+        }
+      ]
+    },
+    {
+      "name": "TriePunteros",
+      "sizes": [
+        {
+          "n": 100,
+          "insert": {
+            "mean_ns": 225290.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 221680.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 1360.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 2344000.0,
+          "done_ns": 66700.0,
+          "memory_peak_bytes": 14288608260
+        },
+        {
+          "n": 10000,
+          "insert": {
+            "mean_ns": 28417910.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 28006500.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 2330.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 70401700.0,
+          "done_ns": 18363900.0,
+          "memory_peak_bytes": 47436392
+        }
+      ]
+    },
+    {
+      "name": "TrieArreglos",
+      "sizes": [
+        {
+          "n": 100,
+          "insert": {
+            "mean_ns": 437100.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 430800.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 1950.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 759900.0,
+          "done_ns": 386700.0,
+          "memory_peak_bytes": 577328
+        },
+        {
+          "n": 10000,
+          "insert": {
+            "mean_ns": 53418770.0,
+            "stdev_ns": 0.0
+          },
+          "delete": {
+            "mean_ns": 52478690.0,
+            "stdev_ns": 0.0
+          },
+          "search": {
+            "mean_ns": 2390.0,
+            "stdev_ns": 0.0
+          },
+          "print_ns": 75935500.0,
+          "done_ns": 6684500.0,
+          "memory_peak_bytes": 52891736
+        }
+      ]
+    }
+  ]
+}

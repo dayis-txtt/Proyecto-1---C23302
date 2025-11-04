@@ -32,7 +32,7 @@ Estado actual
 -------------
 
 - Disponible: ListaOrdenadaDinámica, ListaOrdenadaEstática (capacidad configurable), TablaHashAbierta, AbbPunteros, ABBVectorHeap, TriePunteros, TrieArreglos
-- En progreso: —
+- En progreso: análisis de rendimiento (Tercera Entrega) disponible desde el menú.
 
 Uso
 ---
@@ -93,5 +93,24 @@ Qué valida:
 - El `__str__` de los ABB muestra las claves ordenadas y el tamaño final coincide.
 - En los tries, los duplicados incrementan el tamaño y se podan ramas cuando quedan sin hijos.
 - Al finalizar, tanto ABB como tries quedan consistentes (`[]` cuando se vacían).
+
+
+Pruebas de Rendimiento (Tercera Entrega)
+----------------------------------------
+
+Desde el menú principal, elige “Pruebas de rendimiento” y selecciona:
+
+- Modo rápido: tamaños 100 y 50 000 con 3 corridas.
+- Modo completo: tamaños 100, 50 000 y 1 000 000 con 10 corridas (puede tardar mucho y requerir memoria).
+
+Comandos por consola:
+
+```
+py scripts/analisis_tercera_entrega.py --quick
+# o completo
+py scripts/analisis_tercera_entrega.py
+```
+
+Al finalizar, se generarán archivos JSON y Markdown en la carpeta `resultados/` con promedios, desviaciones, y una heurística de rangos de N por estructura.
 
 
