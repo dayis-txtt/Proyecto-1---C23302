@@ -52,6 +52,16 @@ class ABBVectorHeap(Diccionario):
         """
         if self.__borre_rec(1, elemento):
             self.__tamaño -= 1
+
+            elems: list[str] = []
+            self.__recorrido_inorder(1, elems)
+
+
+            self.__vector = [None]
+            self.__tamaño = 0
+            self.__reconstruya_desde_ordenado(elems, 1)
+            self.__tamaño = len(elems)
+
             self.__compacte_vector()
             self.__verifique_invariante()
             return True
@@ -99,12 +109,12 @@ class ABBVectorHeap(Diccionario):
             self.__vector[indice] = None
             return
         if self.__es_vacio(izq):
-            self.__vector[indice] = self.__vector[der]
-            self.__borre_en_indice(der)
+            # Trasplantar subárbol derecho completo a esta posición
+            self.__mueva_subarbol(der, indice)
             return
         if self.__es_vacio(der):
-            self.__vector[indice] = self.__vector[izq]
-            self.__borre_en_indice(izq)
+            # Trasplantar subárbol izquierdo completo a esta posición
+            self.__mueva_subarbol(izq, indice)
             return
         sucesor = self.__indice_minimo(der)
         self.__vector[indice] = self.__vector[sucesor]
@@ -174,3 +184,41 @@ class ABBVectorHeap(Diccionario):
 
     def __del__(self) -> None:
         self.limpie()
+
+    # --- utilidades privadas para manejo de vector ---
+    def __mueva_subarbol(self, src: int, dst: int) -> None:
+        """Copia (trasplanta) el subárbol en ``src`` hacia ``dst``.
+
+        Copia recursivamente valores y limpia el origen para evitar duplicados.
+        No modifica ``__tamaño``.
+        """
+        # Si el origen está vacío, destino debe vaciarse también
+        if self.__es_vacio(src):
+            self.__asegure_capacidad(dst)
+            self.__vector[dst] = None
+            return
+
+        self.__asegure_capacidad(dst)
+        self.__vector[dst] = self.__vector[src]
+
+        # Mover hijos
+        self.__mueva_subarbol(self.__hijo_izquierdo(src), self.__hijo_izquierdo(dst))
+        self.__mueva_subarbol(self.__hijo_derecho(src), self.__hijo_derecho(dst))
+
+        # Limpiar origen
+        self.__vector[src] = None
+
+    def __reconstruya_desde_ordenado(self, elems: list[str], indice: int) -> None:
+        """Reconstruye un ABB (aprox. balanceado) desde ``elems`` ordenado.
+
+        Coloca el elemento medio en ``indice`` y recurre sobre las mitades en
+        los hijos izquierdo y derecho. Evita crecimiento explosivo de índices
+        de la representación por vector.
+        """
+        if not elems:
+            return
+        mid = len(elems) // 2
+        self.__asegure_capacidad(indice)
+        self.__vector[indice] = elems[mid]
+        self.__reconstruya_desde_ordenado(elems[:mid], self.__hijo_izquierdo(indice))
+        self.__reconstruya_desde_ordenado(elems[mid + 1 :], self.__hijo_derecho(indice))

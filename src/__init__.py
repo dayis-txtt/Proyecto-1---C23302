@@ -151,8 +151,7 @@ def render_menu_etapa() -> None:
 		"\n" 
 		"            Proyecto Diccionario\n\n"
 		"[1] Menú diccionarios\n"
-		"[2] Pruebas por etapas\n"
-		"[3] Pruebas de rendimiento (no disponible)\n\n"
+		"[2] Pruebas por etapas(primera, segunda y tercera etapa)\n"
 		"Digite una opción [_]"
 	)
 	panel_contenido(cuerpo)
@@ -285,19 +284,17 @@ def main() -> None:
 			diccionario = menu_clase()
 			menu_diccionario(diccionario)
 		case "2":
-			#ejecuta los scripts de las pruebas primera y segunda entrega
-			#si el usuario digita 1, se explicará con que se va a ejecutar la primera prueba y cuando presione enter, se ejecutará
-			#Si el usuario digita 2, se explicará con que se va a ejecutar la segunda prueba y cuando presione enter, se ejecutará
 			console.clear()
 			cuerpo = (
 				"\n" 
 				"            Pruebas por etapas\n\n"
 				"[1] Ejecutar pruebas de la Primera Entrega\n"
 				"[2] Ejecutar pruebas de la Segunda Entrega\n\n"
+				"[3] Ejecutar pruebas de la Tercera Entrega\n\n"
 				"Digite una opción [_]"
 			)
 			panel_contenido(cuerpo)
-			opcion_prueba = leer_tecla("12")
+			opcion_prueba = leer_tecla("123")
 			match opcion_prueba:
 				case "1":
 					console.clear()
@@ -319,13 +316,37 @@ def main() -> None:
 					)
 					pausa("")
 					ejecutar_pruebas_segunda()
-		case "3":
-			pausa("Benchmark no implementado aún. Presione Enter…")
+				case "3":
+					console.clear()
+					console.print(
+						"[bold]Pruebas de Rendimiento (Tercera Entrega)[/]\n\n"
+						"Se medirán tiempos promedio y desviación estándar de inserción, borrado y búsqueda\n"
+						"para las 7 implementaciones, y se estimará el uso de memoria.\n\n"
+						"Opciones:\n"
+						" [1] Modo rápido (100 y 50 000; 3 corridas; sin 1 000 000)\n"
+						" [2] Modo completo (100, 50 000 y 1 000 000; 10 corridas)\n\n"
+						"Digite una opción [_]"
+					)
+					opc = leer_tecla("12")
+					console.clear()
+					console.print("Preparando ejecución…\n")
+					try:
+						from scripts.analisis_tercera_entrega import main as bench_main
+						if opc == "1":
+							bench_main(["--quick"])  
+						else:
+							bench_main([])  
+					except ImportError as e:
+						console.print(f"[red]No se encontró el analizador de rendimiento: {e}[/]")
+					pausa("Presione Enter para volver al menú…")
+
+
 
 def ejecutar_pruebas_primera() -> None:
 	from scripts.pruebas_primera_entrega import main as pruebas_primera
 
 	pruebas_primera([])
+
 
 def ejecutar_pruebas_segunda() -> None:
 	from scripts.pruebas_segunda_entrega import main as pruebas_segunda
