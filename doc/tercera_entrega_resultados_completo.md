@@ -170,7 +170,7 @@ Picos de memoria.
 
 ## 7. Conclusiones
 
-1. Uso de memoria:
+### 7.1. Uso de memoria:
 
 - Las estructuras más livianas fueron las listas y los árboles.
 
@@ -178,13 +178,13 @@ Picos de memoria.
 
 - Los tries consumen mucha memoria, así que solo valen la pena si se necesita buscar palabras por prefijo muy rápido.
 
-2. Rendimiento general:
+### 7.2. Rendimiento general:
 
 - Con pocos datos (alrededor de 100), todas funcionan bien.
 
 - Cuando los datos aumentan (10 000 o más), las estructuras de árbol y hash mantienen un buen equilibrio entre velocidad y memoria.
 
-3. Escalabilidad:
+### 7.3. Escalabilidad:
 
 - Los tries no escalan bien porque su consumo de memoria crece demasiado.
 
@@ -192,7 +192,7 @@ Picos de memoria.
 
 - Al ABB funciona bien, pero puede volverse más lento si no está bien balanceado.
 
-4. Conclusión práctica:
+### 7.4. Conclusión práctica:
 
 - Si se quiere usar poca memoria, la ListaOrdenadaEstática es la mejor.
 
